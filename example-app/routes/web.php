@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/token', function () {
-    return csrf_token();;
+    return csrf_token();
 });
 
 Route::resource('/department', DepartmentController::class);

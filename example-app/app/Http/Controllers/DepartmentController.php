@@ -40,7 +40,7 @@ class DepartmentController extends Controller
         ])) {
             return response()->json([
                 'status'=>'ok',
-                'message'=>'department Record inserted successfully..'
+                'message'=>'department Record inserted successfully.'
             ]);
         }
     }
@@ -53,7 +53,16 @@ class DepartmentController extends Controller
      */
     public function show($id)
     {
-        return Department::find($id);
+        if(empty(Department::find($id))) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Department Record not found.'
+            ]);
+
+        } else {
+            return Department::find($id);
+        }
     }
 
     /**
@@ -83,7 +92,7 @@ class DepartmentController extends Controller
         ])) {
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Department Record updated successfully..'
+                'message'=>'Department Record updated successfully.'
             ]);
         }
     }
@@ -96,18 +105,18 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        if(count(Department::find($id)) < 1) {
+        if(empty(Department::find($id))) {
 
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Department Record not found..'
+                'message'=>'Department Record not found.'
             ]);
 
         } elseif(Department::destroy($id)) {
 
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Department Record deleted successfully..'
+                'message'=>'Department Record deleted successfully.'
             ]);
 
         }

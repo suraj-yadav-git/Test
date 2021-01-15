@@ -42,7 +42,7 @@ class ContactsController extends Controller
         ])) {
             return response()->json([
                 'status'=>'ok',
-                'message'=>'employee contact Record inserted successfully..'
+                'message'=>'employee contact Record inserted successfully.'
             ]);
         }
     }
@@ -55,7 +55,16 @@ class ContactsController extends Controller
      */
     public function show($id)
     {
-        return EmployeeContact::find($id);
+        if(empty(EmployeeContact::find($id))) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'employee contact Record not found.'
+            ]);
+
+        } else {
+            return EmployeeContact::find($id);
+        }
     }
 
     /**
@@ -87,7 +96,7 @@ class ContactsController extends Controller
         ])) {
             return response()->json([
                 'status'=>'ok',
-                'message'=>'employee contact Record updated successfully..'
+                'message'=>'employee contact Record updated successfully.'
             ]);
         }
     }
@@ -100,18 +109,18 @@ class ContactsController extends Controller
      */
     public function destroy($id)
     {
-        if(count(EmployeeContact::find($id)) < 1) {
+        if(empty(EmployeeContact::find($id))) {
 
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Employee Contact Record not found..'
+                'message'=>'Employee Contact Record not found.'
             ]);
 
         } elseif(EmployeeContact::destroy($id)) {
 
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Employee Contact Record deleted successfully..'
+                'message'=>'Employee Contact Record deleted successfully.'
             ]);
 
         }

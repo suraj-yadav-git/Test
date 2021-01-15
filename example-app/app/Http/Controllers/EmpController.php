@@ -41,7 +41,7 @@ class EmpController extends Controller
         ])) {
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Employee Record inserted successfully..'
+                'message'=>'Employee Record inserted successfully.'
             ]);
         }
     }
@@ -54,7 +54,16 @@ class EmpController extends Controller
      */
     public function show($id)
     {
-        return Employee::find($id);
+        if(empty(Employee::find($id))) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Employee Record not found.'
+            ]);
+
+        } else {
+            return Employee::find($id);
+        }
     }
 
     /**
@@ -85,7 +94,7 @@ class EmpController extends Controller
         ])) {
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Employee Record updated successfully..'
+                'message'=>'Employee Record updated successfully.'
             ]);
         }
     }
@@ -98,18 +107,18 @@ class EmpController extends Controller
      */
     public function destroy($id)
     {
-        if(count(Employee::find($id)) < 1) {
+        if(empty(Employee::find($id))) {
 
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Employee Record not found..'
+                'message'=>'Employee Record not found.'
             ]);
 
         } elseif(Employee::destroy($id)) {
 
             return response()->json([
                 'status'=>'ok',
-                'message'=>'Employee Record deleted successfully..'
+                'message'=>'Employee Record deleted successfully.'
             ]);
 
         }
