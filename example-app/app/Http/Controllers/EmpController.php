@@ -24,7 +24,7 @@ class EmpController extends Controller
      */
     public function create()
     {
-        //
+        // no form created for now
     }
 
     /**
@@ -35,17 +35,14 @@ class EmpController extends Controller
      */
     public function store(Request $request)
     {  
-        $emp = new Employee();
-
-        $emp->emp_id = $request->emp_id;
-        $emp->department_id = $request->department_id;
-        $emp->emp_name = $request->emp_name;
-
-        if($emp->save()) {
+        if(Employee::create([
+            "department_id" => $request->department_id,
+            "emp_name" => $request->emp_name
+        ])) {
             return response()->json([
-                    'status'=>'ok',
-                    'message'=>'Employee Record inserted successfully..'
-                ]);
+                'status'=>'ok',
+                'message'=>'Employee Record inserted successfully..'
+            ]);
         }
     }
 
@@ -57,7 +54,7 @@ class EmpController extends Controller
      */
     public function show($id)
     {
-        return Employee::where('emp_id', $id)->get();
+        return Employee::find($id);
     }
 
     /**
@@ -68,7 +65,7 @@ class EmpController extends Controller
      */
     public function edit($id)
     {
-        //
+        // no form created for now
     }
 
     /**
@@ -80,7 +77,17 @@ class EmpController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $emp = Employee::find($id);
+
+        if($emp->update([
+            'department_id'=>$request->department_id,
+            'emp_name'=>$request->emp_name
+        ])) {
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Employee Record updated successfully..'
+            ]);
+        }
     }
 
     /**
@@ -91,14 +98,14 @@ class EmpController extends Controller
      */
     public function destroy($id)
     {
-        if(count(Employee::where('emp_id', $id)->get()) < 1) {
+        if(count(Employee::find($id)) < 1) {
 
             return response()->json([
                 'status'=>'ok',
                 'message'=>'Employee Record not found..'
             ]);
 
-        } elseif(Employee::where('emp_id', $id)->delete()) {
+        } elseif(Employee::destroy($id)) {
 
             return response()->json([
                 'status'=>'ok',

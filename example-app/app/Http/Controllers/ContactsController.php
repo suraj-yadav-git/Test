@@ -24,7 +24,7 @@ class ContactsController extends Controller
      */
     public function create()
     {
-        //
+        // no form created for now
     }
 
     /**
@@ -35,18 +35,15 @@ class ContactsController extends Controller
      */
     public function store(Request $request)
     {
-        $empContact = new EmployeeContact();
-
-        $empContact->contact_id = $request->contact_id;
-        $empContact->emp_id = $request->emp_id;
-        $empContact->contact_number = $request->contact_number;
-        $empContact->address = $request->address;
- 
-        if($empContact->save()) {
+        if(EmployeeContact::create([
+            "emp_id" => $request->emp_id,
+            "contact_number" => $request->contact_number,
+            "address" => $request->address
+        ])) {
             return response()->json([
-                    'status'=>'ok',
-                    'message'=>'employee contact Record inserted successfully..'
-                ]);
+                'status'=>'ok',
+                'message'=>'employee contact Record inserted successfully..'
+            ]);
         }
     }
 
@@ -58,7 +55,7 @@ class ContactsController extends Controller
      */
     public function show($id)
     {
-        return EmployeeContact::where('contact_id', $id)->get();
+        return EmployeeContact::find($id);
     }
 
     /**
@@ -69,7 +66,7 @@ class ContactsController extends Controller
      */
     public function edit($id)
     {
-        //
+        // no form created for now
     }
 
     /**
@@ -81,7 +78,18 @@ class ContactsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $empContact = EmployeeContact::find($id);
+
+        if($empContact->update([
+            "emp_id" => $request->emp_id,
+            "contact_number" => $request->contact_number,
+            "address" => $request->address
+        ])) {
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'employee contact Record updated successfully..'
+            ]);
+        }
     }
 
     /**
@@ -92,14 +100,14 @@ class ContactsController extends Controller
      */
     public function destroy($id)
     {
-        if(count(EmployeeContact::where('contact_id', $id)->get()) < 1) {
+        if(count(EmployeeContact::find($id)) < 1) {
 
             return response()->json([
                 'status'=>'ok',
                 'message'=>'Employee Contact Record not found..'
             ]);
 
-        } elseif(EmployeeContact::where('contact_id', $id)->delete()) {
+        } elseif(EmployeeContact::destroy($id)) {
 
             return response()->json([
                 'status'=>'ok',
