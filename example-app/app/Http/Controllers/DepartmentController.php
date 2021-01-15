@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Department;
 
 class DepartmentController extends Controller
 {
@@ -13,7 +14,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return "All Department list here..";
+        return Department::all();
     }
 
     /**
@@ -34,7 +35,17 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $department = new Department();
+
+        $department->department_id = $request->department_id;
+        $department->department_name = $request->department_name;
+ 
+        if($department->save()) {
+            return response()->json([
+                    'status'=>'ok',
+                    'message'=>'department Record inserted successfully..'
+                ]);
+        }
     }
 
     /**
@@ -45,7 +56,7 @@ class DepartmentController extends Controller
      */
     public function show($id)
     {
-        //
+        return Department::where('department_id', $id)->get();
     }
 
     /**
@@ -79,6 +90,20 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(count(Department::where('department_id', $id)->get()) < 1) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Department Record not found..'
+            ]);
+
+        } elseif(Department::where('department_id', $id)->delete()) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Department Record deleted successfully..'
+            ]);
+
+        }
     }
 }

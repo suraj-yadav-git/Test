@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/token', function () {
+    return csrf_token();;
+});
+
 Route::resource('/department', DepartmentController::class);
 
 Route::resource('/employee', EmpController::class);
