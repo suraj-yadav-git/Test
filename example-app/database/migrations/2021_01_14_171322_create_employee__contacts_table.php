@@ -16,7 +16,7 @@ class CreateEmployeeContactsTable extends Migration
         Schema::create('employee_contacts', function (Blueprint $table) {
             $table->id('contact_id');
             $table->integer('emp_id');
-            $table->smallInteger('contact_number');
+            $table->string('contact_number');
             $table->text('address');
             $table->timestamps();
         });
