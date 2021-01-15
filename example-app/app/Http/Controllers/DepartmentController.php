@@ -24,7 +24,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        // no form created for now
     }
 
     /**
@@ -35,16 +35,13 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        $department = new Department();
-
-        $department->department_id = $request->department_id;
-        $department->department_name = $request->department_name;
- 
-        if($department->save()) {
+        if(Department::create([
+            "department_name" => $request->department_name,
+        ])) {
             return response()->json([
-                    'status'=>'ok',
-                    'message'=>'department Record inserted successfully..'
-                ]);
+                'status'=>'ok',
+                'message'=>'department Record inserted successfully..'
+            ]);
         }
     }
 
@@ -56,7 +53,7 @@ class DepartmentController extends Controller
      */
     public function show($id)
     {
-        return Department::where('department_id', $id)->get();
+        return Department::find($id);
     }
 
     /**
@@ -67,7 +64,7 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        //
+        // no form created for now
     }
 
     /**
@@ -79,7 +76,16 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $department = Department::find($id);
+
+        if($department->update([
+            'department_name'=>$request->department_name
+        ])) {
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Department Record updated successfully..'
+            ]);
+        }
     }
 
     /**
@@ -90,14 +96,14 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        if(count(Department::where('department_id', $id)->get()) < 1) {
+        if(count(Department::find($id)) < 1) {
 
             return response()->json([
                 'status'=>'ok',
                 'message'=>'Department Record not found..'
             ]);
 
-        } elseif(Department::where('department_id', $id)->delete()) {
+        } elseif(Department::destroy($id)) {
 
             return response()->json([
                 'status'=>'ok',
