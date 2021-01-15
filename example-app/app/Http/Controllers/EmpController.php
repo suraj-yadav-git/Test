@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Employee;
 
 class EmpController extends Controller
 {
@@ -13,7 +14,7 @@ class EmpController extends Controller
      */
     public function index()
     {
-        return "All Employee list here..";
+        return Employee::all();
     }
 
     /**
@@ -33,8 +34,19 @@ class EmpController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {  
+        $emp = new Employee();
+
+        $emp->emp_id = $request->emp_id;
+        $emp->department_id = $request->department_id;
+        $emp->emp_name = $request->emp_name;
+
+        if($emp->save()) {
+            return response()->json([
+                    'status'=>'ok',
+                    'message'=>'Employee Record inserted successfully..'
+                ]);
+        }
     }
 
     /**
@@ -45,7 +57,7 @@ class EmpController extends Controller
      */
     public function show($id)
     {
-        //
+        return Employee::where('emp_id', $id)->get();
     }
 
     /**
@@ -79,6 +91,20 @@ class EmpController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(count(Employee::where('emp_id', $id)->get()) < 1) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Employee Record not found..'
+            ]);
+
+        } elseif(Employee::where('emp_id', $id)->delete()) {
+
+            return response()->json([
+                'status'=>'ok',
+                'message'=>'Employee Record deleted successfully..'
+            ]);
+
+        }
     }
 }
